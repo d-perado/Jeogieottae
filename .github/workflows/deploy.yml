@@ -41,7 +41,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker Image
-        run: docker push myrepo/myapp:latest
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest .
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
