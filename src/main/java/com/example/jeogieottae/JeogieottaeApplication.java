@@ -10,7 +10,7 @@ public class JeogieottaeApplication {
 
     public static void main(String[] args) {
 
-        System.out.println("성공하면말해다오1221");
+        System.out.println("성공하면말해다오12231");
         SpringApplication.run(JeogieottaeApplication.class, args);
     }
 
