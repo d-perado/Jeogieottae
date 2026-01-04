@@ -29,7 +29,7 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/JeogieottaeServer:latest .
 
       - name: Check Docker Username
         run: echo "DOCKER_USERNAME is ${{ secrets.DOCKER_USERNAME }}"
@@ -41,7 +41,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/JeogieottaeServer:latest
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
@@ -51,14 +51,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "Pull latest Docker image"
-            docker pull ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/JeogieottaeServer:latest
             
             echo "Stop and remove old container"
             docker stop myapp || true
             docker rm myapp || true
             
             echo "Run new container"
-            docker run -d --name myapp -p 8080:8080 \
+            docker run -d --name JeogieottaeServer -p 8080:8080 \
               -e SPRING_DATASOURCE_URL=jdbc:mysql://EC2_DB_PRIVATE_IP:3306/sparta \
               -e SPRING_DATASOURCE_USERNAME=root \
               -e SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD} \
