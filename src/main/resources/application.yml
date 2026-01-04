@@ -3,12 +3,12 @@ spring:
     name: jeogieottae
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATA_SOURCE_URL}
-    username: ${DATA_SOURCE_USERNAME}
-    password: ${DATA_SOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: ${DDL_AUTO}
+      ddl-auto: ${DDL_AUTO:create}
     show-sql: true
     properties:
       hibernate:
