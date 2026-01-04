@@ -25,14 +25,18 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x gradlew
 
-      - name: Create Docker Gradle cache volume
-        run: docker volume create gradle-cache
-
+      # -------------------------------
+      # BuildKit + Gradle 캐시 적용
+      # -------------------------------
       - name: Build Docker Image with Gradle cache
         run: |
+          # BuildKit 활성화
+          export DOCKER_BUILDKIT=1
+          
+          # Docker BuildKit 캐시 적용
           docker build \
             --build-arg GRADLE_USER_HOME=/home/gradle/.gradle \
-            --volume gradle-cache:/home/gradle/.gradle \
+            --mount=type=cache,target=/home/gradle/.gradle \
             -t ${{ secrets.DOCKER_USERNAME }}/jeogieottaeserver:latest .
 
       - name: Check Docker Username
