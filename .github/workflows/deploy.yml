@@ -64,4 +64,4 @@ jobs:
               -e SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD} \
               -e SPRING_REDIS_HOST=EC2_REDIS_PRIVATE_IP \
               -e SPRING_REDIS_PORT=6379 \
-              jeogieottaeserver:latest
+              dperado/jeogieottaeserver:latest
