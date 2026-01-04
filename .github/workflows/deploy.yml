@@ -64,7 +64,7 @@ jobs:
             
             echo "Run new container"
             docker run -d --name jeogieottae -p 8080:8080 \
-              -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
-              -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
-              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
+              -e DATA_SOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
+              -e DATA_SOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
+              -e DATA_SOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
               ${{ secrets.DOCKER_USERNAME }}/jeogieottaeserver:latest
