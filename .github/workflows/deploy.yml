@@ -28,16 +28,18 @@ jobs:
       # -------------------------------
       # BuildKit + Gradle 캐시 적용
       # -------------------------------
+      - name: Set up Docker Buildx
+        run: docker buildx create --use
+
       - name: Build Docker Image with Gradle cache
         run: |
-          # BuildKit 활성화
-          export DOCKER_BUILDKIT=1
-          
-          # Docker BuildKit 캐시 적용
-          docker build \
+          docker buildx build \
             --build-arg GRADLE_USER_HOME=/home/gradle/.gradle \
-            --mount=type=cache,target=/home/gradle/.gradle \
-            -t ${{ secrets.DOCKER_USERNAME }}/jeogieottaeserver:latest .
+            --cache-to=type=local,dest=/tmp/.gradle-cache \
+            --cache-from=type=local,src=/tmp/.gradle-cache \
+            -t ${{ secrets.DOCKER_USERNAME }}/jeogieottaeserver:latest \
+            --load .
+
 
       - name: Check Docker Username
         run: echo "DOCKER_USERNAME is ${{ secrets.DOCKER_USERNAME }}"
