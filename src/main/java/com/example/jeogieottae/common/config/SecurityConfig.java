@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,21 +28,20 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .cors()
-                .and()
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signup").permitAll()
-                        .requestMatchers("/auth/signin").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/coupons").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/accommodations").permitAll()
+                        .requestMatchers("/auth/signup", "/auth/signin").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/coupons", "/accommodations").permitAll()
                         .anyRequest().authenticated()
                 )
+
                 .addFilterBefore(jwtFilter, SecurityContextHolderAwareRequestFilter.class)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .build();
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
@@ -54,6 +52,6 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
 
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        return source;
     }
 }
