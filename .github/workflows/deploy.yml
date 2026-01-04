@@ -1,4 +1,4 @@
-name: CI/CD Spring Boot App
+name: CI/CD Jeogieottae
 
 on:
   push:
@@ -25,11 +25,15 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x gradlew
 
-      - name: Build JAR
-        run:  ./gradlew clean build -x test --refresh-dependencies
+      - name: Create Docker Gradle cache volume
+        run: docker volume create gradle-cache
 
-      - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/jeogieottaeserver:latest .
+      - name: Build Docker Image with Gradle cache
+        run: |
+          docker build \
+            --build-arg GRADLE_USER_HOME=/home/gradle/.gradle \
+            --volume gradle-cache:/home/gradle/.gradle \
+            -t ${{ secrets.DOCKER_USERNAME }}/jeogieottaeserver:latest .
 
       - name: Check Docker Username
         run: echo "DOCKER_USERNAME is ${{ secrets.DOCKER_USERNAME }}"
@@ -64,4 +68,4 @@ jobs:
               -e SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD} \
               -e SPRING_REDIS_HOST=EC2_REDIS_PRIVATE_IP \
               -e SPRING_REDIS_PORT=6379 \
-              dperado/jeogieottaeserver:latest
+              ${{ secrets.DOCKER_USERNAME }}/jeogieottaeserver:latest
